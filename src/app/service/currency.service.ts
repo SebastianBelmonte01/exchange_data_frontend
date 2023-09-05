@@ -11,11 +11,14 @@ import {ApiResponse} from "../models/ApiResponse";
 export class CurrencyService {
 
   constructor(private http: HttpClient, private currencyStore: CurrencyStore) { }
-
   getAllCurrencies(): Observable<Currency[]>{
     return this.http.get<ApiResponse<Currency[]>>('http://localhost:8080/api/v1/exchange/all').pipe(
         map((response: ApiResponse<Currency[]>) => response.response || []),
         tap((currencies) => this.currencyStore.setCurrencies(currencies))
     );
+  }
+  setSelectedCurrency(id: number) {
+    console.log("SET SELECTED CURRENCY");
+    return this.currencyStore.setSelectedCurrency(id);
   }
 }

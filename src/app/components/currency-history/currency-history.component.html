@@ -28,7 +28,13 @@
   </tbody>
 </table>
 
-<span>{{currencyStore.currencies$ | async}}</span>
+<h3>Cambio Seleccionado</h3>
+<div>
+  <label>ID: </label>
+  <span> {{currencyStore.selectedCurrency$?.id}} </span>
+</div>
+
+
 
 
 

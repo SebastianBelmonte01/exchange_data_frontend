@@ -19,6 +19,6 @@ export class CurrencyHistoryComponent{
   ngOnInit(): void {
     console.log("COMPONENT HISTORY INITIALIZED");
     this.currencyService.getAllCurrencies().subscribe();
+    this.currencyService.setSelectedCurrency(3);
   }
-
 }
