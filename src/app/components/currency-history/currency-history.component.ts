@@ -20,5 +20,6 @@ export class CurrencyHistoryComponent{
     console.log("COMPONENT HISTORY INITIALIZED");
     this.currencyService.getAllCurrencies().subscribe();
     this.currencyService.setSelectedCurrency(3);
+    this.currencyService.deleteCurrency(3).subscribe();
   }
 }

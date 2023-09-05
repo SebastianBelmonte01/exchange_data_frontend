@@ -21,4 +21,10 @@ export class CurrencyService {
     console.log("SET SELECTED CURRENCY");
     return this.currencyStore.setSelectedCurrency(id);
   }
+
+  deleteCurrency(id: number) {
+    return this.http.delete('http://localhost:8080/api/v1/exchange?id=' + id).pipe(
+        tap(() => this.currencyStore.deteleCurrency(id))
+    );
+  }
 }

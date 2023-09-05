@@ -1,6 +1,6 @@
 import { createStore, select } from '@ngneat/elf';
 import {
-  addEntities, getEntity,
+  addEntities, deleteEntities, getEntity,
   selectAllEntities,
   selectAllEntitiesApply, selectEntity,
   updateEntities, withActiveId, withEntities,
@@ -33,8 +33,13 @@ export class CurrencyStore{
       console.log(id);
       currencyStore.query(getEntity(id));
       this.selectedCurrency$ = currencyStore.query(getEntity(id));
-        console.log(this.selectedCurrency$);
+      console.log(this.selectedCurrency$);
     }
+
+    deteleCurrency(id: number) {
+      currencyStore.update(deleteEntities(id));
+    }
+
 
 
 
