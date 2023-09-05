@@ -1,1 +1,28 @@
-<p>currency-history works!</p>
+<h2>Historial de Cambios Realizados</h2>
+
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Date</th>
+    <th>Amount</th>
+    <th>From</th>
+    <th>To</th>
+    <th>Result</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let currency of currencyStore.currencies$ | async">
+    <td>{{ currency.id }}</td>
+    <td>{{ currency.date | date:'dd/MM/yyyy'}}</td>
+    <td>{{ currency.query.amount }}</td>
+    <td>{{ currency.query.from }}</td>
+    <td>{{ currency.query.to }}</td>
+    <td>{{ currency.result }}</td>
+    <td>
+      <button>Edit</button>
+      <button>Delete</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
