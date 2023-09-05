@@ -35,6 +35,17 @@ export class CurrencyStore{
       return currencyStore.pipe(selectEntity(currecySelectedId));
   }
 
+  updateCurrency(id: number, newFrom: string, newTo: string, newAmount: number) {
+    currencyStore.update(
+        updateEntities(id, (entity) => ({
+          ...entity,
+            from: newFrom,
+            to: newTo,
+            amount: newAmount
+        }))
+    );
+  }
+
 
 
   }
