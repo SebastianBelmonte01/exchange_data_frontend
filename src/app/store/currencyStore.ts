@@ -2,7 +2,7 @@ import { createStore, select } from '@ngneat/elf';
 import {
   addEntities,
   selectAllEntities,
-  selectAllEntitiesApply,
+  selectAllEntitiesApply, selectEntity,
   updateEntities, withEntities,
 } from '@ngneat/elf-entities';
 import {inject, Injectable} from "@angular/core";
@@ -21,9 +21,20 @@ const currencyStore = createStore(
 export class CurrencyStore{
 
   currencies$ = currencyStore.pipe(selectAllEntities());
+  // currency$ = currencyStore.pipe(selectEntity(Curre));
+
 
     setCurrencies(currencies: Currency[]) {
       currencyStore.update(addEntities(currencies));
     }
+
+  setSelectedCurrency(currecySelectedId: number) {
+      //Where should I store the selected currency?
+      // this.currency$ = currencyStore.pipe(selectEntity(currecySelectedId));
+
+      return currencyStore.pipe(selectEntity(currecySelectedId));
+  }
+
+
 
   }

@@ -20,9 +20,15 @@
     <td>{{ currency.query.to }}</td>
     <td>{{ currency.result }}</td>
     <td>
+      <button (click)="currencyStore.setSelectedCurrency(currency.id)">Select</button>
       <button>Edit</button>
       <button>Delete</button>
     </td>
   </tr>
   </tbody>
 </table>
+
+<span>{{currencyStore.currencies$ | async}}</span>
+
+
+
