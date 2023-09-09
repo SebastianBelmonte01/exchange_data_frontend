@@ -1,39 +1,72 @@
-<h2>Historial de Cambios Realizados</h2>
 
-<table>
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Date</th>
-    <th>Amount</th>
-    <th>From</th>
-    <th>To</th>
-    <th>Result</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let currency of currencyStore.currencies$ | async">
-    <td>{{ currency.id }}</td>
-    <td>{{ currency.date | date:'dd/MM/yyyy'}}</td>
-    <td>{{ currency.query.amount }}</td>
-    <td>{{ currency.query.from }}</td>
-    <td>{{ currency.query.to }}</td>
-    <td>{{ currency.result }}</td>
-    <td>
-      <button (click)="currencyStore.setSelectedCurrency(currency.id)">Select</button>
-      <button>Edit</button>
-      <button (click)="currencyStore.deteleCurrency(currency.id)">Delete</button>
-    </td>
-  </tr>
-  </tbody>
+<mat-toolbar color="primary">
+  <span>Historial de Cambios Realizados</span>
+</mat-toolbar>
+
+
+<table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let currency"> {{currency.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let currency"> {{currency.date}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> Amount </th>
+      <td mat-cell *matCellDef="let currency"> {{currency.query.amount}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="from">
+      <th mat-header-cell *matHeaderCellDef> From </th>
+      <td mat-cell *matCellDef="let currency"> {{currency.query.from}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="to">
+      <th mat-header-cell *matHeaderCellDef> To </th>
+      <td mat-cell *matCellDef="let currency"> {{currency.query.to}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="result">
+      <th mat-header-cell *matHeaderCellDef> Result </th>
+      <td mat-cell *matCellDef="let currency"> {{currency.result}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let currency">
+
+        <button mat-icon-button color="primary" (click)="deleteCurrency(currency.id) ">
+          <mat-icon>delete</mat-icon>
+        </button>
+
+        <button mat-icon-button color="primary" (click)="console.log('edit')">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button mat-raised-button color="primary" (click)="console.log(currency)">Select</button>
+
+      </td>
+
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let currency; columns: displayedColumns;"></tr>
+
+
 </table>
 
-<h3>Cambio Seleccionado</h3>
-<div>
-  <label>ID: </label>
-  <span> {{currencyStore.selectedCurrency$?.id}} </span>
-</div>
 
+<!--Center a button-->
+<div class="center">
+  <button mat-fab color="primary" >
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
 
 
 

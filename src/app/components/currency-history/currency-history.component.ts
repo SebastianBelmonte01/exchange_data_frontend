@@ -10,16 +10,38 @@ import {CurrencyStore} from "../../store/currencyStore";
 })
 export class CurrencyHistoryComponent{
 
+  displayedColumns: string[] = ['id', 'date', 'amount', 'from', 'to', 'result', 'actions'];
+
   currencyService: CurrencyService  = inject(CurrencyService);
+  currencies$ = this.currencyStore.currencies$;
+  dataSource: Currency[] = [];
+  isLoading: boolean = false;
+
+
 
   constructor(public currencyStore: CurrencyStore) {
-
-  }
-
-  ngOnInit(): void {
-    console.log("COMPONENT HISTORY INITIALIZED");
+    console.log('constructor');
     this.currencyService.getAllCurrencies().subscribe();
-    this.currencyService.setSelectedCurrency(3);
-    this.currencyService.deleteCurrency(3).subscribe();
+
   }
+
+  ngOnInit() {
+    console.log('ngOnInit');
+    this.currencies$
+      .subscribe((response) => {
+        console.log(response);
+        const currencyProps = this.currencyStore.getCurrencyProps();
+        console.log('currencyProps');
+        console.log(currencyProps);
+        this.isLoading = response.isLoading;
+        this.dataSource =  response.data;
+        console.log(this.dataSource);
+      });
+  }
+
+  deleteCurrency(id: number) {
+    this.currencyService.deleteCurrency(id).subscribe();
+  }
+
+  protected readonly console = console;
 }
