@@ -2,6 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {CurrencyService} from "../../service/currency.service";
 import {Currency} from "../../models/Currency";
 import {CurrencyStore} from "../../store/currencyStore";
+import {DialogService} from "../../service/dialog/dialog.service";
 
 @Component({
   selector: 'app-currency-history',
@@ -19,7 +20,7 @@ export class CurrencyHistoryComponent{
 
 
 
-  constructor(public currencyStore: CurrencyStore) {
+  constructor(public currencyStore: CurrencyStore, private _dialog: DialogService) {
     console.log('constructor');
     this.currencyService.getAllCurrencies().subscribe();
 
@@ -37,6 +38,10 @@ export class CurrencyHistoryComponent{
         this.dataSource =  response.data;
         console.log(this.dataSource);
       });
+  }
+
+  openDialog(currency: Currency) {
+    this._dialog.open(currency);
   }
 
   deleteCurrency(id: number) {

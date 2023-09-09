@@ -12,13 +12,14 @@ import {MatTableModule} from "@angular/material/table";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
-
+import { DialogComponent } from './components/dialog/dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
     CurrencyHistoryComponent,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,6 +30,7 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatTableModule,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
