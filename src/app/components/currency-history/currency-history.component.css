@@ -1,3 +1,8 @@
 .center {
     text-align: right;
 }
+
+
+.currency-field {
+  margin: 10px;
+}

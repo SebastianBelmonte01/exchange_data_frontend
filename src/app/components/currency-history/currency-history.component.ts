@@ -15,8 +15,10 @@ export class CurrencyHistoryComponent{
 
   currencyService: CurrencyService  = inject(CurrencyService);
   currencies$ = this.currencyStore.currencies$;
+
   dataSource: Currency[] = [];
   isLoading: boolean = false;
+
 
 
 

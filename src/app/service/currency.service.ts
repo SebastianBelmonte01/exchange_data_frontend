@@ -32,4 +32,12 @@ export class CurrencyService {
     this.currencyStore.deleteCurrency(id);
     return this.http.delete<ApiResponse<Currency>>(`http://localhost:8080/api/v1/exchange?id=${id}`)
   }
+
+  convertCurrency(fromCurrency: string, toCurrency: string, amount: number) {
+    console.log('convertCurrency Service');
+    console.log(fromCurrency);
+    console.log(toCurrency);
+    console.log(amount);
+    return this.http.post<Currency>(`http://localhost:8080/api/v1/exchange?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`, null)
+  }
 }
