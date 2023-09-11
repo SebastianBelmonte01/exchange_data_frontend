@@ -44,6 +44,19 @@ export class CurrencyStore{
       currencyStore.update(deleteEntities(id));
     }
 
+    editCurrency(newTo: string, newFrom: string, newAmount: number, id: number) {
+    console.log('editCurrency');
+    currencyStore.update(
+      updateEntities(id, (currency) => ({
+        ...currency,
+        to: newTo,
+        from: newFrom,
+        amount: newAmount
+        })
+      )
+    );
+    }
+
 
 
 

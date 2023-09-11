@@ -44,7 +44,7 @@
           <mat-icon>delete</mat-icon>
         </button>
 
-        <button mat-icon-button color="primary" (click)="console.log('edit')">
+        <button mat-icon-button color="primary" (click)="showCurrencyConfig(currency)">
           <mat-icon>edit</mat-icon>
         </button>
 
@@ -67,6 +67,40 @@
     <mat-icon>add</mat-icon>
   </button>
 </div>
+
+
+
+<div class="container" *ngIf="this.edit">
+  <h2>Currency Converter</h2>
+
+  <mat-form-field class="currency-field">
+    <label>Amount</label>
+    <input matInput placeholder="Amount" [(ngModel)]="amount" type="number">
+  </mat-form-field>
+
+  <mat-form-field class="currency-field">
+    <label>From</label>
+    <mat-select placeholder="From Currency" [(ngModel)]="fromCurrency">
+      <mat-option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="currency-field">
+    <label>To</label>
+    <mat-select placeholder="To Currency" [(ngModel)]="toCurrency">
+      <mat-option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <div class="result" *ngIf="result !== null">
+    {{ amount }} {{ fromCurrency }} = {{ result }} {{ toCurrency }}
+  </div>
+  <hr>
+
+  <button class="center" mat-raised-button color="primary" (click)="editCurrency()">Update</button>
+</div>
+
 
 
 

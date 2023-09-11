@@ -18,6 +18,16 @@ export class CurrencyHistoryComponent{
 
   dataSource: Currency[] = [];
   isLoading: boolean = false;
+  edit: boolean = false;
+
+
+  id: number = 0;
+  amount: number = 0;
+  fromCurrency: string = 'USD';
+  toCurrency: string = 'EUR';
+  result: number | null = null;
+  currencies: string[] = ['USD', 'EUR', 'GBP', 'JPY', 'BOB'];
+
 
 
 
@@ -50,5 +60,18 @@ export class CurrencyHistoryComponent{
     this.currencyService.deleteCurrency(id).subscribe();
   }
 
-  protected readonly console = console;
+
+  showCurrencyConfig(currency: Currency) {
+      this.edit = !this.edit;
+      this.id = currency.id;
+      this.amount = currency.query.amount;
+      this.fromCurrency = currency.query.from;
+      this.toCurrency = currency.query.to;
+  }
+
+  editCurrency() {
+    this.currencyService.editCurrency(this.toCurrency ,this.fromCurrency, this.amount, this.id).subscribe();
+     this.edit = !this.edit;
+  }
+
 }

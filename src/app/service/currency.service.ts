@@ -40,4 +40,15 @@ export class CurrencyService {
     console.log(amount);
     return this.http.post<Currency>(`http://localhost:8080/api/v1/exchange?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`, null)
   }
+
+  editCurrency(newTo: string, newFrom: string, newAmount: number, id: number) {
+    console.log('editCurrency Service');
+    console.log(newTo);
+    console.log(newFrom);
+    this.currencyStore.editCurrency(newTo, newFrom, newAmount, id);
+    return this.http.put<Currency>(`http://localhost:8080/api/v1/exchange?id=${id}&from=${newFrom}&to=${newTo}&amount=${newAmount}`, null)
+      .pipe(
+        trackRequestResult(['currencies'], {skipCache: true})
+      );
+  }
 }
