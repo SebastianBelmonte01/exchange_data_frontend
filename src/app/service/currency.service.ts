@@ -17,7 +17,7 @@ export class CurrencyService {
   }
 
   getAllCurrencies() {
-    return this.http.get<ApiResponse<Currency[]>>('http://localhost:8080/api/v1/exchange/all')
+    return this.http.get<ApiResponse<Currency[]>>('http://localhost:8081/api/v1/exchange/all')
       .pipe(
         tap((response) =>
           this.currencyStore.setCurrencies(response.response),
@@ -30,7 +30,7 @@ export class CurrencyService {
   deleteCurrency(id: number){
     console.log('deleteCurrency Service');
     this.currencyStore.deleteCurrency(id);
-    return this.http.delete<ApiResponse<Currency>>(`http://localhost:8080/api/v1/exchange?id=${id}`)
+    return this.http.delete<ApiResponse<Currency>>(`http://localhost:8081/api/v1/exchange?id=${id}`)
   }
 
   convertCurrency(fromCurrency: string, toCurrency: string, amount: number) {
@@ -38,7 +38,7 @@ export class CurrencyService {
     console.log(fromCurrency);
     console.log(toCurrency);
     console.log(amount);
-    return this.http.post<Currency>(`http://localhost:8080/api/v1/exchange?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`, null)
+    return this.http.post<Currency>(`http://localhost:8081/api/v1/exchange?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`, null)
   }
 
   editCurrency(newTo: string, newFrom: string, newAmount: number, id: number) {
@@ -46,7 +46,7 @@ export class CurrencyService {
     console.log(newTo);
     console.log(newFrom);
     this.currencyStore.editCurrency(newTo, newFrom, newAmount, id);
-    return this.http.put<Currency>(`http://localhost:8080/api/v1/exchange?id=${id}&from=${newFrom}&to=${newTo}&amount=${newAmount}`, null)
+    return this.http.put<Currency>(`http://localhost:8081/api/v1/exchange?id=${id}&from=${newFrom}&to=${newTo}&amount=${newAmount}`, null)
       .pipe(
         trackRequestResult(['currencies'], {skipCache: true})
       );

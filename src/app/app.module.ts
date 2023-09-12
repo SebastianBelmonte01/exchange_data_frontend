@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -18,6 +18,25 @@ import {FormsModule} from "@angular/forms";
 import { CurrencyConverterComponent } from './components/currency-converter/currency-converter.component';
 import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
+import { NotFoundComponent } from './components/not-found/not-found.component';
+
+
+function initializeKeycloak(keycloak: KeycloakService) {
+  return () =>
+    keycloak.init({
+      config: {
+        url: 'http://localhost:8080',
+        realm: 'prove',
+        clientId: 'currency-web'
+      },
+      initOptions: {
+        onLoad: 'check-sso',
+        silentCheckSsoRedirectUri:
+          window.location.origin + '/assets/silent-check-sso.html'
+      }
+    });
+}
 
 @NgModule({
   declarations: [
@@ -26,6 +45,7 @@ import {MatInputModule} from "@angular/material/input";
     CurrencyHistoryComponent,
     DialogComponent,
     CurrencyConverterComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,9 +60,18 @@ import {MatInputModule} from "@angular/material/input";
     MatDialogModule,
     MatSelectModule,
     FormsModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    KeycloakAngularModule
+
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService]
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
