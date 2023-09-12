@@ -22,7 +22,9 @@ export class CurrencyService {
         tap((response) =>
           this.currencyStore.setCurrencies(response.response),
         ),
-        trackRequestResult(['currencies'], {skipCache: true})
+        // trackRequestResult(['currencies'], {skipCache: true})
+        trackRequestResult(['currencies'], { additionalKeys: currencies => currencies.response.map(currency => (['currencies', currency.id])), skipCache: true })
+
       );
 
   }
@@ -45,10 +47,13 @@ export class CurrencyService {
     console.log('editCurrency Service');
     console.log(newTo);
     console.log(newFrom);
-    this.currencyStore.editCurrency(newTo, newFrom, newAmount, id);
     return this.http.put<Currency>(`http://localhost:8081/api/v1/exchange?id=${id}&from=${newFrom}&to=${newTo}&amount=${newAmount}`, null)
       .pipe(
-        trackRequestResult(['currencies'], {skipCache: true})
+        tap((response) =>
+          this.currencyStore.editCurrency(newTo, newFrom, newAmount, id)
+        ),
+        // trackRequestResult(['currencies'], {skipCache: true})
+
       );
   }
 }
