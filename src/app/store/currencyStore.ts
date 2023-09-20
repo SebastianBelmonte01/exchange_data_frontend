@@ -23,13 +23,7 @@ export class CurrencyStore{
 
   currencies$ = currencyStore.pipe(
     selectAllEntities(),
-    joinRequestResult(['currencies'])
   );
-
-  getCurrencyProps() {
-    return currencyStore.query((state) => state);
-  }
-
 
     setCurrencies(currencies: Currency[]) {
       //TODO need to understand how does it work
@@ -44,14 +38,19 @@ export class CurrencyStore{
       currencyStore.update(deleteEntities(id));
     }
 
-    editCurrency(newTo: string, newFrom: string, newAmount: number, id: number) {
-    console.log('editCurrency');
+    editCurrency(newTo: string, newFrom: string, newAmount: number, id: number, result: number) {
+    console.log("NEW ID");
+    console.log(id)
     currencyStore.update(
-      updateEntities(id, (currency) => ({
+      updateEntities(id, currency => ({
         ...currency,
-        to: newTo,
-        from: newFrom,
-        amount: newAmount
+        query: {
+          ...currency.query,
+          to: newTo,
+          from: newFrom,
+          amount: newAmount,
+        },
+        result: result,
         })
       )
     );

@@ -17,7 +17,6 @@ export class CurrencyHistoryComponent{
   currencies$ = this.currencyStore.currencies$;
 
   dataSource: Currency[] = [];
-  isLoading: boolean = false;
   edit: boolean = false;
 
 
@@ -40,16 +39,14 @@ export class CurrencyHistoryComponent{
 
   ngOnInit() {
     console.log('ngOnInit');
-    this.currencies$
-      .subscribe((response) => {
-        console.log(response);
-        const currencyProps = this.currencyStore.getCurrencyProps();
-        console.log('currencyProps');
-        console.log(currencyProps);
-        this.isLoading = response.isLoading;
-        this.dataSource =  response.data;
-        console.log(this.dataSource);
-      });
+    this.currencyService.getAllCurrencies().subscribe();
+      // .subscribe((response) => {
+      //   console.log(response);
+      //   const currencyProps = this.currencyStore.getCurrencyProps();
+      //   console.log('currencyProps');
+      //   console.log(currencyProps);
+      //   console.log(this.dataSource);
+      // });
   }
 
   openDialog(currency: Currency) {
@@ -70,6 +67,7 @@ export class CurrencyHistoryComponent{
   }
 
   editCurrency() {
+    console.log('editCurrency');
     this.currencyService.editCurrency(this.toCurrency ,this.fromCurrency, this.amount, this.id).subscribe();
      this.edit = !this.edit;
   }

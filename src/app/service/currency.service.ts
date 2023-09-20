@@ -44,16 +44,12 @@ export class CurrencyService {
   }
 
   editCurrency(newTo: string, newFrom: string, newAmount: number, id: number) {
-    console.log('editCurrency Service');
-    console.log(newTo);
-    console.log(newFrom);
-    return this.http.put<Currency>(`http://localhost:8081/api/v1/exchange?id=${id}&from=${newFrom}&to=${newTo}&amount=${newAmount}`, null)
-      .pipe(
-        tap((response) =>
-          this.currencyStore.editCurrency(newTo, newFrom, newAmount, id)
-        ),
-        // trackRequestResult(['currencies'], {skipCache: true})
-
-      );
+    return this.http.put<ApiResponse<Currency>>(`http://localhost:8081/api/v1/exchange?id=${id}&from=${newFrom}&to=${newTo}&amount=${newAmount}`, null).pipe(
+        tap( (response) => {
+          console.log('editCurrency Service');
+          console.log(response);
+          this.currencyStore.editCurrency(response.response.query.to, response.response.query.from, response.response.query.amount, response.response.id, response.response.result)
+        })
+    );
   }
 }
