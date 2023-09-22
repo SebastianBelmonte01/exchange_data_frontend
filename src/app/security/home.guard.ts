@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import {
   Router,
@@ -7,7 +8,7 @@ import {
 import { KeycloakService, KeycloakAuthGuard } from 'keycloak-angular';
 
 @Injectable()
-export class AppAuthGuard extends KeycloakAuthGuard {
+export class HomeGuard extends KeycloakAuthGuard {
   constructor(
     protected override router: Router,
     protected override keycloakAngular: KeycloakService
@@ -20,32 +21,17 @@ export class AppAuthGuard extends KeycloakAuthGuard {
     state: RouterStateSnapshot
   ): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      let permission;
       if (!this.authenticated) {
         this.keycloakAngular.login().catch((e) => console.error(e));
         return reject(false);
       }
-
-      const requiredRoles: string[] = route.data['roles'];
-      console.log(requiredRoles);
-      if (!requiredRoles || requiredRoles.length === 0) {
-        permission = true;
-      } else {
-
-        if (!this.roles || this.roles.length === 0) {
-          permission = false
-        }
-        if (requiredRoles.every((role) => this.roles.indexOf(role) > -1)) {
-          permission = true;
-        }
-        else {
-          permission = false;
-        };
+      console.log(this.roles);
+      if(this.roles.indexOf('ADMIN') > -1){
+        this.router.navigate(['main']);
       }
-      if (!permission) {
-        this.router.navigate(['NotFound']);
+      else if(this.roles.indexOf('USER') > -1){
+        this.router.navigate(['user/currency/all']);
       }
-      resolve(permission)
     });
   }
 }

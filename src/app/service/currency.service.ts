@@ -40,7 +40,7 @@ export class CurrencyService {
     console.log(fromCurrency);
     console.log(toCurrency);
     console.log(amount);
-    return this.http.post<Currency>(`http://localhost:8081/api/v1/exchange?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`, null)
+    return this.http.post<Currency>(`http://localhost:8081/api/v1/exchange/new?from=${fromCurrency}&to=${toCurrency}&amount=${amount}`, null)
   }
 
   editCurrency(newTo: string, newFrom: string, newAmount: number, id: number) {
@@ -51,5 +51,16 @@ export class CurrencyService {
           this.currencyStore.editCurrency(response.response.query.to, response.response.query.from, response.response.query.amount, response.response.id, response.response.result)
         })
     );
+  }
+
+  getConvertCurrencies(page: number, size: number) {
+    return this.http.get<ApiResponse<Currency[]>>(`http://localhost:8081/api/v1/exchange/user/all?page=${page}&size=${size}`)
+      .pipe(
+        tap((response) =>
+          this.currencyStore.setCurrencies(response.response),
+
+        ),
+        trackRequestResult(['currencies'], {skipCache: false})
+      );
   }
 }

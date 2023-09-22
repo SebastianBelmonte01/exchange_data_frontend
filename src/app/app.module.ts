@@ -20,6 +20,11 @@ import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { CurrencyPageableComponent } from './components/currency-pageable/currency-pageable.component';
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {AppAuthGuard} from "./security/auth-guard.guard";
+import { HomeComponent } from './components/home/home.component';
+import {HomeGuard} from "./security/home.guard";
 
 
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -46,6 +51,8 @@ function initializeKeycloak(keycloak: KeycloakService) {
     DialogComponent,
     CurrencyConverterComponent,
     NotFoundComponent,
+    CurrencyPageableComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,10 +68,12 @@ function initializeKeycloak(keycloak: KeycloakService) {
     MatSelectModule,
     FormsModule,
     MatFormFieldModule,
-    KeycloakAngularModule
-
+    KeycloakAngularModule,
+    MatPaginatorModule
   ],
   providers: [
+    AppAuthGuard,
+    HomeGuard,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
