@@ -26,11 +26,12 @@ export class HomeGuard extends KeycloakAuthGuard {
         return reject(false);
       }
       console.log(this.roles);
+      console.log("HOME GUARD")
       if(this.roles.indexOf('ADMIN') > -1){
-        this.router.navigate(['main']);
+        this.router.navigate(['main']).then(r => console.log(r));
       }
       else if(this.roles.indexOf('USER') > -1){
-        this.router.navigate(['user/currency/all']);
+        this.router.navigate(['user/currency/all']).then(r => console.log(r));
       }
     });
   }

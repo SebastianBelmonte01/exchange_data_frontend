@@ -3,6 +3,7 @@ import {CurrencyService} from "../../service/currency.service";
 import {Currency} from "../../models/Currency";
 import {CurrencyStore} from "../../store/currencyStore";
 import {DialogService} from "../../service/dialog/dialog.service";
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-currency-history',
@@ -31,7 +32,7 @@ export class CurrencyHistoryComponent{
 
 
 
-  constructor(public currencyStore: CurrencyStore, private _dialog: DialogService) {
+  constructor(public currencyStore: CurrencyStore, private _dialog: DialogService, private keycloakService: KeycloakService) {
     console.log('constructor');
     this.currencyService.getAllCurrencies().subscribe();
 
@@ -70,6 +71,10 @@ export class CurrencyHistoryComponent{
     console.log('editCurrency');
     this.currencyService.editCurrency(this.toCurrency ,this.fromCurrency, this.amount, this.id).subscribe();
      this.edit = !this.edit;
+  }
+
+  logout() {
+    this.keycloakService.logout();
   }
 
 }

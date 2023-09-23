@@ -4,6 +4,8 @@ import {MatTableDataSource} from "@angular/material/table";
 import {Currency} from "../../models/Currency";
 import {CurrencyService} from "../../service/currency.service";
 import {CurrencyStore} from "../../store/currencyStore";
+import {switchMap} from "rxjs";
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-currency-pageable',
@@ -12,24 +14,38 @@ import {CurrencyStore} from "../../store/currencyStore";
 })
 export class CurrencyPageableComponent {
 
-  currencyService: CurrencyService = Inject(CurrencyService);
-  currencyStore: CurrencyStore = Inject(CurrencyStore);
 
-  currencies$ = this.currencyStore.currencies$;
+  currencies$ = this.currencyStore.pageableCurrencies$;
+  paginationData$ = this.currencyStore.paginationData$;
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  dataSource: MatTableDataSource<Currency> = new MatTableDataSource<Currency>([]);
+  dataSource: Currency[] = [];
   displayedColumns: string[] = ['id', 'from', 'to', 'amount', 'convertedCurrency', 'date'];
-  maxSize: number = 0;
 
-  // constructor() {
-  //   this.currencyService.getConvertCurrencies(0, 5).subscribe();
-  // }
+  constructor(private currencyService: CurrencyService, private currencyStore: CurrencyStore, private keycloakService: KeycloakService) {
+
+  }
+  ngOnInit() {
+    console.log(this.currencies$)
+    console.log('ngOnInit');
+    console.log(this.currencyStore.currentPage$)
+    this.currencyStore.currentPage$
+      .pipe(
+        switchMap((page) => this.currencyService.getPageableCurrencies(page - 1))
+      )
+      .subscribe();
+  }
+
+
 
 
   pageChangeEvent($event: PageEvent) {
     console.log($event);
-    this.currencyService.getConvertCurrencies($event.pageIndex, 5).subscribe();
+    this.currencyStore.setActivePage($event.pageIndex + 1);
+  }
+
+  logout() {
+    this.keycloakService.logout();
   }
 
 }

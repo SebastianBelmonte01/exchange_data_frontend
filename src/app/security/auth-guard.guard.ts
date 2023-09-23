@@ -28,6 +28,7 @@ export class AppAuthGuard extends KeycloakAuthGuard {
 
       const requiredRoles: string[] = route.data['roles'];
       console.log(requiredRoles);
+      console.log("OnGuard")
       if (!requiredRoles || requiredRoles.length === 0) {
         permission = true;
       } else {

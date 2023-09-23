@@ -8,13 +8,20 @@ import {
 import {inject, Injectable} from "@angular/core";
 import {Currency} from "../models/Currency";
 import {CurrencyService} from "../service/currency.service";
-import {joinRequestResult} from "@ngneat/elf-requests";
+import {
+  PaginationData,
+  selectCurrentPage,
+  selectCurrentPageEntities,
+  selectPaginationData, setCurrentPage, setPage, updatePaginationData,
+  withPagination
+} from "@ngneat/elf-pagination";
 
 
 
 const currencyStore = createStore(
   {name: 'currencyStore'},
   withEntities<Currency>(),
+  withPagination()
 );
 
 
@@ -24,11 +31,18 @@ export class CurrencyStore{
   currencies$ = currencyStore.pipe(
     selectAllEntities(),
   );
+  pageableCurrencies$ = currencyStore.pipe(
+    selectCurrentPageEntities(),
+  );
+  currentPage$ = currencyStore.pipe(
+    selectCurrentPage(),
+  );
+  paginationData$ = currencyStore.pipe(
+    selectPaginationData(),
+  );
 
     setCurrencies(currencies: Currency[]) {
-      //TODO need to understand how does it work
       currencyStore.update(setEntities(currencies));
-      //Why should I use setProps
     }
 
 
@@ -55,6 +69,33 @@ export class CurrencyStore{
       )
     );
     }
+
+
+  //   Currency Pageable Store methods
+    setActivePage(id: Currency['id']) {
+      currencyStore.update(setCurrentPage(id));
+    }
+
+
+  setPageableCurrencies(page: number, currencies: PaginationData & { data: Currency[] }) {
+    const { data, ...pagination } = currencies;
+    currencyStore.update(
+      addEntities(data),
+      updatePaginationData(pagination),
+      setPage(
+        page,
+        data.map((c) => c.id)
+      )
+    );
+  }
+
+
+
+
+
+
+
+
 
 
 

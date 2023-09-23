@@ -4,7 +4,8 @@ import {map, Observable, tap} from "rxjs";
 import {Currency} from "../models/Currency";
 import {CurrencyStore} from "../store/currencyStore";
 import {ApiResponse} from "../models/ApiResponse";
-import { trackRequestResult } from '@ngneat/elf-requests';
+import {PaginationData} from "@ngneat/elf-pagination";
+import {Paginator} from "../models/paginator";
 
 
 
@@ -22,9 +23,6 @@ export class CurrencyService {
         tap((response) =>
           this.currencyStore.setCurrencies(response.response),
         ),
-        // trackRequestResult(['currencies'], {skipCache: true})
-        trackRequestResult(['currencies'], { additionalKeys: currencies => currencies.response.map(currency => (['currencies', currency.id])), skipCache: true })
-
       );
 
   }
@@ -32,7 +30,7 @@ export class CurrencyService {
   deleteCurrency(id: number){
     console.log('deleteCurrency Service');
     this.currencyStore.deleteCurrency(id);
-    return this.http.delete<ApiResponse<Currency>>(`http://localhost:8081/api/v1/exchange?id=${id}`)
+    return this.http.delete<ApiResponse<Currency>>(`http://localhost:8081/api/v1/exchange/delete?id=${id}`)
   }
 
   convertCurrency(fromCurrency: string, toCurrency: string, amount: number) {
@@ -44,7 +42,7 @@ export class CurrencyService {
   }
 
   editCurrency(newTo: string, newFrom: string, newAmount: number, id: number) {
-    return this.http.put<ApiResponse<Currency>>(`http://localhost:8081/api/v1/exchange?id=${id}&from=${newFrom}&to=${newTo}&amount=${newAmount}`, null).pipe(
+    return this.http.put<ApiResponse<Currency>>(`http://localhost:8081/api/v1/exchange/update?id=${id}&from=${newFrom}&to=${newTo}&amount=${newAmount}`, null).pipe(
         tap( (response) => {
           console.log('editCurrency Service');
           console.log(response);
@@ -53,14 +51,24 @@ export class CurrencyService {
     );
   }
 
-  getConvertCurrencies(page: number, size: number) {
-    return this.http.get<ApiResponse<Currency[]>>(`http://localhost:8081/api/v1/exchange/user/all?page=${page}&size=${size}`)
-      .pipe(
-        tap((response) =>
-          this.currencyStore.setCurrencies(response.response),
 
-        ),
-        trackRequestResult(['currencies'], {skipCache: false})
-      );
+
+  getPageableCurrencies(page: number): Observable<PaginationData & { data: Currency[] }> {
+    return this.http.get<ApiResponse<Paginator<Currency>>>(`http://localhost:8081/api/v1/exchange/user/all?page=${page}&size=5`).pipe(
+      tap(response => console.log('Received JSON:', response)),
+      map((response: ApiResponse<Paginator<Currency>>) => {
+        const content = response.response?.content || [];
+        return {
+          currentPage: page + 1,
+          perPage: 5,
+          total: response.response?.totalElements || 0,
+          lastPage: Math.ceil((response.response?.totalElements || 0) / 5),
+          data: content
+        };
+      }),
+      tap((paginationData) => {
+        this.currencyStore.setPageableCurrencies(page + 1, paginationData);
+      })
+    );
   }
 }
