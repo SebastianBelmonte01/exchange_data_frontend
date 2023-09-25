@@ -25,13 +25,14 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {AppAuthGuard} from "./security/auth-guard.guard";
 import { HomeComponent } from './components/home/home.component';
 import {HomeGuard} from "./security/home.guard";
+import {environment} from "../environments/environment";
 
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
     keycloak.init({
       config: {
-        url: 'http://localhost:8080',
+        url: environment.KEYCLOACK_URL,
         realm: 'prove',
         clientId: 'currency-web'
       },
