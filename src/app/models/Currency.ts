@@ -7,4 +7,5 @@ export interface Currency {
   info: null | string;
   date: string;
   result: number;
+  isSeen: boolean;
 }

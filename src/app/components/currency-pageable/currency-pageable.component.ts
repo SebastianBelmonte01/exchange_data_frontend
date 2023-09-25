@@ -22,7 +22,7 @@ export class CurrencyPageableComponent {
   dataSource: Currency[] = [];
   displayedColumns: string[] = ['id', 'from', 'to', 'amount', 'convertedCurrency', 'date'];
 
-  constructor(private currencyService: CurrencyService, private currencyStore: CurrencyStore, private keycloakService: KeycloakService) {
+  constructor(private  currencyService: CurrencyService, private currencyStore: CurrencyStore, private keycloakService: KeycloakService) {
 
   }
   ngOnInit() {
