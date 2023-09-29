@@ -1,4 +1,4 @@
-FROM node:18.17 as build
+FROM --platform node:18.17 as build
 
 ARG environment
 WORKDIR /usr/src/app
